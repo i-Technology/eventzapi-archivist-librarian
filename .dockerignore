@@ -1,0 +1,14 @@
+.git
+.github
+.idea
+.venv
+venv
+__pycache__
+*.pyc
+*.key
+*.pem
+.env
+benchmarks/
+recovery_backup/
+eventz-step4/
+eventz-step6-capacity-rollover/
