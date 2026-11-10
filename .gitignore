@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+
+# PyCharm
+.idea/
+
+# Backups and damaged copies
+recovery_backup/
+*.damaged
+* (1).py
+*.bak
+*.backup
+
+# Generated archives
+*.zip
+*.tar
+*.tar.gz
+
+# Local development artifacts
+*.log
+*.tmp
+.env
+.env.*
+*.key
+*.pem
+
+# Qualification output
+htmlcov/
