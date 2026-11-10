@@ -1,0 +1,40 @@
+name: EventzAPI Qualification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile Python source
+        run: |
+          python -m compileall -q \
+            archivist_writer.py \
+            capacity_archive.py \
+            checkpoint_witness.py \
+            cloud_y.py \
+            cloud_y_inventory.py \
+            cloud_y_recovery.py \
+            volume_archive.py \
+            volume_policy.py \
+            witnessed_librarian.py \
+            y_inventory.py
+
+      - name: Run qualification suite
+        env:
+          PYTHONPATH: .
+        run: |
+          python -m unittest discover -s tests -v
