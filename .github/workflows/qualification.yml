@@ -38,3 +38,13 @@ jobs:
           PYTHONPATH: .
         run: |
           python -m unittest discover -s tests -v
+
+      - name: Build qualification Docker image
+        run: |
+          docker build \
+            -f Dockerfile.qualification \
+            -t eventzapi-qualification:ci .
+
+      - name: Run qualification inside Docker
+        run: |
+          docker run --rm eventzapi-qualification:ci
