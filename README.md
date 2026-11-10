@@ -1,20 +1,81 @@
-EventzAPI Step 3: RabbitMQ–Archivist qualification
+# EventzAPI — Archivist and Librarian
 
-Copy the three .py scripts into the SAME directory as your existing archivist_writer.py.
-Do NOT replace archivist_writer.py. Do NOT run against a production archive.
+**Qualification baseline:** Step 7D.8 · **98 automated tests passed** (10 November 2026) · **Pre-production engineering**
 
-Requires: pip install pika (if not already installed in your venv)
-Requires: RabbitMQ reachable on localhost:5672 with guest/guest, or set:
-  EVENTZ_RMQ_HOST, EVENTZ_RMQ_PORT, EVENTZ_RMQ_VHOST,
-  EVENTZ_RMQ_USER, EVENTZ_RMQ_PASSWORD
+EventzAPI provides archival, integrity-verification, and recovery components for systems implementing **The Eventz Law**:
 
-Run from the directory containing archivist_writer.py:
-  python3 integration_qualification.py
+\[
+y = F(Y,e)
+\]
 
-The script creates a uniquely named durable RabbitMQ queue and a temporary Y,
-forces the consumer to exit after fsync but before ACK, restarts the consumer,
-verifies redelivery does not duplicate Y, and cleans up its own queue.
+Here, `e` is a new event, `F` is a pure Function, `y` is its immutable result tuple, and `Y` is an append-only tuple space. In the Eventz model, **Y is the authoritative data persistence**; indexes and other derived structures must be reconstructible rather than independent sources of truth.
 
-NOTE: This is a controlled process-crash test, NOT a physical power-loss test.
-It does not verify the separate publisher-side pending cache or archival proof.
-The archive writer currently assumes one active writer and no external mutations.
+## Architecture at a glance
+
+```text
+Business Functions F ── immutable tuples y ──> RabbitMQ / AMQP
+                                                |
+                                                v
+                                           Archivist
+                                                |
+                                                v
+                                     Y: immutable tuple archive
+                                                |
+                           +--------------------+-------------------+
+                           |                                        |
+                     Inventory / checkpoint                       Librarian
+                           |                                        |
+                     Checkpoint Witness                    verified tuple reads
+                     authenticated receipts                 from Y or Repair Y
+```
+
+This diagram is conceptual. The repository contains several qualification prototypes and test paths; it does **not** establish that all components have been deployed as one production service.
+
+- **Archivist:** durable tuple commits, UUID-based idempotence, and capacity/volume management.
+- **Cloud Y:** content-addressed tuple storage with inventory and recovery mechanisms.
+- **Checkpoint Witness:** hash-chained, HMAC-authenticated checkpoint receipts, checked against an independently trusted expected head.
+- **Librarian:** verifies inventory evidence and tuple contents before returning a record; can consult a separate Repair Y when the original is damaged.
+- **RabbitMQ:** AMQP transport used in the Archivist integration qualification. Message delivery and durable storage are separate responsibilities.
+
+See [Architecture and trust boundaries](docs/ARCHITECTURE.md) for component contracts, recovery behavior, and limitations.
+
+## Qualification evidence
+
+The latest reported full regression run completed **98 tests in 21.379 seconds**, with no failures. It covered:
+
+- Durable commits, duplicate UUID handling, and restart/rebuild behavior
+- Volume rollover, capacity policy, and cross-volume integrity
+- Content-addressed storage, inventories, missing/corrupted tuples, and recovery
+- Controlled process-crash and redelivery scenarios
+- Witness receipt authentication, pinned-head checks, and adversarial Librarian reads
+- Step 7D.8 atomic witness snapshot tests (tests 93–98)
+
+The qualified source snapshot is tagged **`v0.1.0-qualification`** (commit `e15acad`). These are **local qualification results**, not a production certification, penetration test, or proof of resilience to every failure mode. Some tests explicitly document known limitations.
+
+## Run the unit-test suite
+
+From the repository root, with a suitable Python environment:
+
+```bash
+PYTHONPATH=. python3 -m unittest discover -s tests -v
+```
+
+The suite includes subprocess crash tests. Run it in a development environment, **not against production archives**. RabbitMQ integration qualification is documented separately in [Step 3](docs/step3-rabbitmq.txt) and requires `pika` and a reachable broker.
+
+## Repository contents
+
+| Area | Purpose |
+| --- | --- |
+| `archivist_writer.py`, `archivist_consumer.py` | Local durable writer and consumer components |
+| `capacity_archive.py`, `volume_archive.py`, `volume_policy.py` | Capacity and volume transitions |
+| `cloud_y.py`, `cloud_y_inventory.py`, `cloud_y_recovery.py` | Content-addressed Y, inventory, recovery |
+| `checkpoint_witness.py` | Independent checkpoint receipts and verification |
+| `witnessed_librarian.py` | Witness-backed, integrity-checked retrieval |
+| `tests/` | Automated qualification tests |
+| `docs/` | Engineering notes and architecture |
+
+## History and scope
+
+Archivist and Librarian originated in an earlier Eventz implementation distributed through Docker approximately five years before this qualification effort. This repository captures the **newly qualified engineering baseline** rather than claiming that the historical Docker image and current modules are interchangeable.
+
+This project is separate from the established [EventzAPI repository](https://github.com/i-Technology/eventzAPI). No production readiness, licensing terms, or integration release should be inferred solely from the qualification tag.
