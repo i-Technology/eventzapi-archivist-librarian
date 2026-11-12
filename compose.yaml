@@ -9,7 +9,7 @@ services:
       - .env
     command:
       - --queue
-      - eventz.ireland.compose-test
+      - ${EVENTZ_QUEUE:-eventz.archivist}
       - --archive
       - /Y/compose.tsv
     volumes:

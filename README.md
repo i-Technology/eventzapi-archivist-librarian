@@ -10,6 +10,25 @@ y = F(Y,e)
 
 Here, `e` is a new event, `F` is a pure Function, `y` is its immutable result tuple, and `Y` is an append-only tuple space. In the Eventz model, **Y is the authoritative data persistence**; indexes and other derived structures must be reconstructible rather than independent sources of truth.
 
+## Quick Start
+
+EventzAPI Archivist can run on Ubuntu using Docker Compose.
+
+1. Clone this repository.
+2. Copy `.env.example` to `.env`.
+3. Configure your RabbitMQ AMQPS connection and queue.
+4. Run `./start-eventzapi.sh`.
+5. Verify startup using `sudo docker compose logs --tail=20 archivist`.
+
+The Archivist runs as a non-root user and preserves its
+append-only Y archive in `compose-Y/`.
+
+**Installation instructions:**
+[Ubuntu Docker installation guide](docs/INSTALL-UBUNTU.md)
+
+**Important:** Use your own RabbitMQ credentials. Never commit
+`.env` or delete the persistent Y archive during upgrades.
+
 ## Architecture at a glance
 
 ```text

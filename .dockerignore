@@ -12,3 +12,6 @@ benchmarks/
 recovery_backup/
 eventz-step4/
 eventz-step6-capacity-rollover/
+
+# Persistent EventzAPI tuple archive
+compose-Y/
