@@ -34,3 +34,6 @@ htmlcov/
 
 # Local RabbitMQ credentials
 .env
+
+# Docker Compose persistent archive
+compose-Y/
