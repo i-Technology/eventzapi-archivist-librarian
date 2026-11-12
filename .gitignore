@@ -31,3 +31,6 @@ recovery_backup/
 
 # Qualification output
 htmlcov/
+
+# Local RabbitMQ credentials
+.env

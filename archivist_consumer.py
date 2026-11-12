@@ -6,15 +6,29 @@ from pathlib import Path
 import pika
 from archivist_writer import ArchiveWriter, ArchiveError
 
-
 def connection():
-    return pika.BlockingConnection(pika.ConnectionParameters(
-        host=os.getenv('EVENTZ_RMQ_HOST', 'localhost'),
-        port=int(os.getenv('EVENTZ_RMQ_PORT', '5672')),
-        virtual_host=os.getenv('EVENTZ_RMQ_VHOST', '/'),
-        credentials=pika.PlainCredentials(os.getenv('EVENTZ_RMQ_USER', 'guest'),
-                                          os.getenv('EVENTZ_RMQ_PASSWORD', 'guest')),
-        heartbeat=60, blocked_connection_timeout=30))
+    url = os.getenv('EVENTZ_RMQ_URL')
+
+    if url:
+        if not url.startswith('amqps://'):
+            raise ValueError(
+                'EVENTZ_RMQ_URL must use amqps://'
+            )
+        parameters = pika.URLParameters(url)
+    else:
+        parameters = pika.ConnectionParameters(
+            host=os.getenv('EVENTZ_RMQ_HOST', 'localhost'),
+            port=int(os.getenv('EVENTZ_RMQ_PORT', '5672')),
+            virtual_host=os.getenv('EVENTZ_RMQ_VHOST', '/'),
+            credentials=pika.PlainCredentials(
+                os.getenv('EVENTZ_RMQ_USER', 'guest'),
+                os.getenv('EVENTZ_RMQ_PASSWORD', 'guest')
+            ),
+            heartbeat=60,
+            blocked_connection_timeout=30
+        )
+
+    return pika.BlockingConnection(parameters)
 
 
 def main():
