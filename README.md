@@ -26,6 +26,13 @@ append-only Y archive in `compose-Y/`.
 **Installation instructions:**
 [Ubuntu Docker installation guide](docs/INSTALL-UBUNTU.md)
 
+**Newcomer qualification:**
+[Verify Archivist operation](docs/QUALIFY-ARCHIVIST.md)
+
+After installation, use the qualification guide to publish a
+test tuple, verify its persistence in Y, restart the Archivist,
+and demonstrate UUID duplicate suppression.
+
 **Important:** Use your own RabbitMQ credentials. Never commit
 `.env` or delete the persistent Y archive during upgrades.
 
