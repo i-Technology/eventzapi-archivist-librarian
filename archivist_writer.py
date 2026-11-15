@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Standalone, single-process Eventz archive writer (initial qualification build).
 
 Y is authoritative. The UUID index is reconstructed from Y on startup.

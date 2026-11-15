@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Step 6 qualification adapter: simulated per-volume capacity, not disk monitoring.
 
 Single writer. Does not change the existing ArchiveWriter or VolumeArchive.

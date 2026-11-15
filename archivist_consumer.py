@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Qualification-only RabbitMQ consumer. Not the production Archivist."""
 import argparse
 import ast

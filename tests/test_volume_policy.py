@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 
 import sys
 from pathlib import Path

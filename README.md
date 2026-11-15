@@ -105,3 +105,19 @@ The suite includes subprocess crash tests. Run it in a development environment, 
 Archivist and Librarian originated in an earlier Eventz implementation distributed through Docker approximately five years before this qualification effort. This repository captures the **newly qualified engineering baseline** rather than claiming that the historical Docker image and current modules are interchangeable.
 
 This project is separate from the established [EventzAPI repository](https://github.com/i-Technology/eventzAPI). No production readiness, licensing terms, or integration release should be inferred solely from the qualification tag.
+
+## Licence
+
+Copyright (C) 2026 I-Technology Inc.
+
+EventzAPI Archivist and Librarian is licensed under the
+GNU Lesser General Public License, version 3 only.
+
+SPDX-License-Identifier: LGPL-3.0-only
+
+See [LICENSE](LICENSE) and [COPYING.GPL3](COPYING.GPL3)
+for the complete licence terms.
+
+Commercial use is permitted under the terms of the licence.
+Independent business Functions (F) may remain proprietary,
+subject to applicable licence conditions.

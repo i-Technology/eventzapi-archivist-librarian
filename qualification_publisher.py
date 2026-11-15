@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Publish a durable test tuple to a dedicated qualification queue."""
 import argparse
 import uuid

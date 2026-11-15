@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Step 5 prototype: crash-safe logical Y across immutable/sealed volume files.
 
 Single writer, local POSIX filesystem, no external mutation. Not production storage.

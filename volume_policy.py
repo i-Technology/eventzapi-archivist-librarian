@@ -1,3 +1,6 @@
+# Copyright (C) 2026 I-Technology Inc.
+# SPDX-License-Identifier: LGPL-3.0-only
+
 """Pure, non-destructive Eventz archive capacity policy (qualification prototype)."""
 from dataclasses import dataclass
 from enum import Enum
