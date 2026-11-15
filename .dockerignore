@@ -15,3 +15,7 @@ eventz-step6-capacity-rollover/
 
 # Persistent EventzAPI tuple archive
 compose-Y/
+
+# Additional local environment configurations
+.env.*
+!.env.example
