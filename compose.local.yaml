@@ -1,0 +1,54 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:4.2
+    hostname: eventz-rabbitmq
+
+    environment:
+      RABBITMQ_DEFAULT_USER: eventz
+      RABBITMQ_DEFAULT_PASS: eventz-local
+
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+    restart: "no"
+
+  archivist:
+    build:
+      context: .
+      dockerfile: Dockerfile.operational
+
+    image: eventzapi-operational:0.2
+
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+
+    environment:
+      EVENTZ_RMQ_HOST: rabbitmq
+      EVENTZ_RMQ_PORT: "5672"
+      EVENTZ_RMQ_VHOST: "/"
+      EVENTZ_RMQ_USER: eventz
+      EVENTZ_RMQ_PASSWORD: eventz-local
+
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+    command:
+      - --queue
+      - eventz.archivist
+      - --archive
+      - /Y/compose.tsv
+
+    volumes:
+      - ./compose-Y:/Y
+
+    restart: "no"
+
+volumes:
+  rabbitmq-data:
