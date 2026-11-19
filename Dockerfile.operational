@@ -6,6 +6,7 @@ RUN pip install --no-cache-dir pika==1.3.2
 
 COPY archivist_writer.py .
 COPY archivist_consumer.py .
+COPY qualification_publisher.py .
 
 ENV PYTHONUNBUFFERED=1
 

@@ -24,7 +24,7 @@ services:
       context: .
       dockerfile: Dockerfile.operational
 
-    image: eventzapi-operational:0.2
+    image: eventzapi-operational:0.3
 
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
 
